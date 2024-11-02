@@ -15,6 +15,8 @@ class NotesdetailScreen extends StatefulWidget {
 class _NotesdetailScreenState extends State<NotesdetailScreen> {
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConstants.primarycolor,
@@ -28,7 +30,7 @@ class _NotesdetailScreenState extends State<NotesdetailScreen> {
             )),
       ),
       body: Container(
-        width: double.infinity,
+        width: width,
         color: ColorConstants.primarycolor,
         child: Column(
           children: [

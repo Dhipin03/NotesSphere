@@ -29,6 +29,8 @@ class _NoteUpdateScreenState extends State<NoteUpdateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -50,6 +52,7 @@ class _NoteUpdateScreenState extends State<NoteUpdateScreen> {
         backgroundColor: ColorConstants.primarycolor,
       ),
       body: Container(
+        width: width,
         padding: EdgeInsets.symmetric(vertical: 60, horizontal: 15),
         color: ColorConstants.primarycolor,
         child: Column(

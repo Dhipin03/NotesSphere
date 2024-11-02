@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
+      (timeStamp) async {
         context.read<HomeScreenController>().calculatetaskpercent();
       },
     );
@@ -28,88 +28,87 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: ColorConstants.primarycolor,
       body: SafeArea(
         child: Consumer<HomeScreenController>(
-          builder: (context, value, child) => value.isLogined
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Container(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                  color: ColorConstants.primarycolor,
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'NoteSphere',
-                        style: GoogleFonts.roboto(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: ColorConstants.textcolor),
-                      ),
-                      SizedBox(height: 22),
-                      _buildProgressSection(),
-                      SizedBox(height: 22),
-                      buildDashboardCardRow(),
-                      SizedBox(height: 22),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Progress",
-                            style: GoogleFonts.roboto(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: ColorConstants.textcolor),
-                          ),
-                          Text(
-                            "See all",
-                            style: GoogleFonts.roboto(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: ColorConstants.textcolor),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Expanded(
-                        child: ListView.separated(
-                            itemBuilder: (context, index) => Container(
-                                  decoration: BoxDecoration(
-                                    color: ColorConstants.secondarycolor,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  height: 80,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 12),
-                                  child: ListTile(
-                                    trailing: Icon(
-                                      Icons.done_all,
-                                      color: Colors.green,
-                                    ),
-                                    title: Text(
-                                      value.completedTasks?[index]['task']
-                                              .toString() ??
-                                          'No Task Added',
-                                      style: GoogleFonts.roboto(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorConstants.textcolor),
-                                    ),
-                                  ),
-                                ),
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 10),
-                            itemCount: value.completedTasks!.length <= 3
-                                ? value.completedTasks!.length
-                                : 4),
-                      )
-                    ],
-                  ),
+          builder: (context, value, child) => Container(
+            height: height,
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            color: ColorConstants.primarycolor,
+            width: width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'NoteSphere',
+                  style: GoogleFonts.roboto(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: ColorConstants.textcolor),
                 ),
+                SizedBox(height: 22),
+                _buildProgressSection(),
+                SizedBox(height: 22),
+                buildDashboardCardRow(),
+                SizedBox(height: 22),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Progress",
+                      style: GoogleFonts.roboto(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: ColorConstants.textcolor),
+                    ),
+                    Text(
+                      "See all",
+                      style: GoogleFonts.roboto(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: ColorConstants.textcolor),
+                    )
+                  ],
+                ),
+                SizedBox(height: 20),
+                Expanded(
+                  child: ListView.separated(
+                      itemBuilder: (context, index) => Container(
+                            decoration: BoxDecoration(
+                              color: ColorConstants.secondarycolor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            height: 80,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 12),
+                            child: ListTile(
+                              trailing: Icon(
+                                Icons.done_all,
+                                color: Colors.green,
+                              ),
+                              title: Text(
+                                value.completedTasks?[index]['task']
+                                        .toString() ??
+                                    'No Task Added',
+                                style: GoogleFonts.roboto(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: ColorConstants.textcolor),
+                              ),
+                            ),
+                          ),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 10),
+                      itemCount: value.completedTasks!.length <= 3
+                          ? value.completedTasks!.length
+                          : 4),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

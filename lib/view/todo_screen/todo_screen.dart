@@ -31,6 +31,8 @@ class _TodoScreenState extends State<TodoScreen> {
   final date = DateFormat('dd-MM-yyyy').format(DateTime.now());
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -177,6 +179,7 @@ class _TodoScreenState extends State<TodoScreen> {
         ),
         body: Consumer<HomeScreenController>(
           builder: (context, provider, child) => Container(
+            width: width,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
             color: ColorConstants.primarycolor,
             child: TabBarView(

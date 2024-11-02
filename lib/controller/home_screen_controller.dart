@@ -125,17 +125,45 @@ class HomeScreenController with ChangeNotifier {
     }
   }
 
-  calculatetaskpercent() {
-    completedTaskCount = completedTasks?.length ?? 0;
-    pendingTaskCount = pendingTasks?.length ?? 0;
-    int totalTasks = completedTaskCount + pendingTaskCount;
-    if (totalTasks == 0) {
+  void calculatetaskpercent() {
+    try {
+      completedTaskCount = completedTasks?.length ?? 0;
+      pendingTaskCount = pendingTasks?.length ?? 0;
+      int totalTasks = completedTaskCount + pendingTaskCount;
+
+      if (totalTasks == 0) {
+        percent = 0;
+        result = 0;
+      } else {
+        percent = (completedTaskCount / totalTasks) * 100;
+        result = percent.toInt();
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error calculating task percentage: $e');
       percent = 0;
       result = 0;
-    } else {
-      percent = (completedTaskCount / totalTasks) * 100;
-      result = percent.toInt();
+      notifyListeners();
     }
+  }
+
+  HomeScreenController() {
+    // Initialize data when controller is created
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    isLogined = true;
+    notifyListeners();
+
+    await initdb(); // Ensure database is initialized
+    await getPendingTasks();
+    await getCompletedTasks();
+    await getnotes();
+
+    calculatetaskpercent();
+
+    isLogined = false;
     notifyListeners();
   }
 }

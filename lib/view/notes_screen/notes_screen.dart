@@ -31,6 +31,8 @@ class _NotesScreenState extends State<NotesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     final notesList = context.watch<HomeScreenController>().notelist ?? [];
     return Scaffold(
       floatingActionButton: Container(
@@ -217,7 +219,7 @@ class _NotesScreenState extends State<NotesScreen> {
             )),
       ),
       body: Container(
-        width: double.infinity,
+        width: width,
         color: ColorConstants.primarycolor,
         padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
         child: Column(
