@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Today's Progress",
+                            "Progress",
                             style: GoogleFonts.roboto(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -88,10 +88,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: ListTile(
                                     trailing: Icon(
                                       Icons.done_all,
-                                      color: Colors.red,
+                                      color: Colors.green,
                                     ),
                                     title: Text(
-                                      'Read a Book',
+                                      value.completedTasks?[index]['task']
+                                              .toString() ??
+                                          'No Task Added',
                                       style: GoogleFonts.roboto(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w500,
@@ -101,7 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                             separatorBuilder: (context, index) =>
                                 SizedBox(height: 10),
-                            itemCount: 3),
+                            itemCount: value.completedTasks!.length <= 3
+                                ? value.completedTasks!.length
+                                : 4),
                       )
                     ],
                   ),
@@ -213,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Today's Progress",
+                  "Progress",
                   style: GoogleFonts.roboto(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
@@ -223,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     Text(
-                      "You have completed ${providerobj.pendingTaskCount} out of ${providerobj.completedTaskCount} tasks,\nkeep up the progress!",
+                      "You have completed ${providerobj.pendingTaskCount} out of ${providerobj.completedTaskCount + 1} tasks,\nkeep up the progress!",
                       style: GoogleFonts.roboto(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,

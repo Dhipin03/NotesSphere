@@ -16,6 +16,7 @@ class HomeScreenController with ChangeNotifier {
   int completedTaskCount = 0;
   int pendingTaskCount = 0;
   final todaysdate = DateFormat('dd-MM-YYYY').format(DateTime.now());
+
   static Future<void> initdb() async {
     mydatabase1 = await openDatabase(
       'notesphere1.db',
