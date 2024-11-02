@@ -1,16 +1,6 @@
 # notessphere
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Screenshot_1730550424](https://github.com/user-attachments/assets/0a5a6445-f1d2-4857-9ef5-fdbc11b20c54)
+![Screenshot_1730550420](https://github.com/user-attachments/assets/fba6cbbd-6966-46dd-8ec2-52296ba6686d)
+![Screenshot_1730550414](https://github.com/user-attachments/assets/760184b1-2689-4d8b-9c3e-33b79adc9acc)
+![Screenshot_1730550411](https://github.com/user-attachments/assets/cf4e4fb5-7ab2-4964-a94b-b15470b2b3f6)
