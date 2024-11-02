@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:notessphere/controller/note_screen_controller.dart';
+import 'package:notessphere/controller/home_screen_controller.dart';
 import 'package:notessphere/view/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NoteScreenController.initdb();
+  await HomeScreenController.initdb();
   runApp(MyApp());
 }
 
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => NoteScreenController(),
+          create: (context) => HomeScreenController(),
         )
       ],
       child: MaterialApp(

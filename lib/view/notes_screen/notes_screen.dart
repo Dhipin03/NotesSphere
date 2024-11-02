@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notessphere/controller/note_screen_controller.dart';
+import 'package:notessphere/controller/home_screen_controller.dart';
 import 'package:notessphere/utils/constants/color_constants.dart';
 import 'package:notessphere/view/home_screen/home_screen.dart';
-import 'package:notessphere/view/notedetail_screen/note_update_screen.dart';
+import 'package:notessphere/view/notes_detail_screen/notesdetail_screen.dart';
+import 'package:notessphere/view/noteupdate_screen/note_update_screen.dart';
 import 'package:provider/provider.dart';
 
 class NotesScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class _NotesScreenState extends State<NotesScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        context.read<NoteScreenController>().getnotes();
+        context.read<HomeScreenController>().getnotes();
       },
     );
     super.initState();
@@ -30,7 +31,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final notesList = context.watch<NoteScreenController>().notelist ?? [];
+    final notesList = context.watch<HomeScreenController>().notelist ?? [];
     return Scaffold(
       floatingActionButton: Container(
         decoration: BoxDecoration(
@@ -160,7 +161,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                 onTap: () {
                                   if (_formKey.currentState!.validate()) {
                                     context
-                                        .read<NoteScreenController>()
+                                        .read<HomeScreenController>()
                                         .addnotes(notetiltlecontroller.text,
                                             noteContentcontroller.text);
                                   }
@@ -238,69 +239,99 @@ class _NotesScreenState extends State<NotesScreen> {
                     mainAxisSpacing: 15,
                     crossAxisSpacing: 15,
                     childAspectRatio: 0.79),
-                itemBuilder: (context, index) => Container(
-                  decoration: BoxDecoration(
-                      color: ColorConstants.secondarycolor,
-                      borderRadius: BorderRadius.circular(10)),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 16,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 90),
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => NoteUpdateScreen(),
-                                    ));
-                              },
-                              child: Icon(
-                                size: 22,
-                                Icons.edit,
-                                color: ColorConstants.textcolor,
+                itemBuilder: (context, index) => InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotesdetailScreen(
+                            content:
+                                notesList[index]['notecontent']?.toString() ??
+                                    'No Content',
+                            title: notesList[index]['title']?.toString() ??
+                                'No Title',
+                          ),
+                        ));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: ColorConstants.secondarycolor,
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 90),
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => NoteUpdateScreen(
+                                          title: notesList[index]['title']
+                                                  ?.toString() ??
+                                              'No Title',
+                                          content: notesList[index]
+                                                      ['notecontent']
+                                                  ?.toString() ??
+                                              'No Content',
+                                          id: notesList[index]['id'],
+                                        ),
+                                      ));
+                                },
+                                child: Icon(
+                                  size: 22,
+                                  Icons.edit,
+                                  color: ColorConstants.textcolor,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 15),
-                            InkWell(
-                              onTap: () {
-                                context
-                                    .read<NoteScreenController>()
-                                    .deletenote(notesList[index]['id']);
-                              },
-                              child: Icon(
-                                size: 22,
-                                Icons.delete,
-                                color: ColorConstants.textcolor,
+                              SizedBox(width: 15),
+                              InkWell(
+                                onTap: () {
+                                  context
+                                      .read<HomeScreenController>()
+                                      .deletenote(notesList[index]['id']);
+                                },
+                                child: Icon(
+                                  size: 22,
+                                  Icons.delete,
+                                  color: ColorConstants.textcolor,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        notesList[index]['title']?.toString() ??
-                            'Untitled Note',
-                        style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: ColorConstants.textcolor),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        notesList[index]['notecontent'].toString(),
-                        style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                            color: ColorConstants.textcolor),
-                      )
-                    ],
+                        SizedBox(height: 20),
+                        Text(
+                          notesList[index]['title']?.toString() ??
+                              'Untitled Note',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          softWrap: true,
+                          style: GoogleFonts.roboto(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: ColorConstants.textcolor),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          notesList[index]['notecontent'].toString(),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 4,
+                          softWrap: true,
+                          style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                              color: ColorConstants.textcolor),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

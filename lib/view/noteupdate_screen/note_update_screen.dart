@@ -1,22 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:notessphere/controller/home_screen_controller.dart';
 import 'package:notessphere/utils/constants/color_constants.dart';
+import 'package:provider/provider.dart';
 
 class NoteUpdateScreen extends StatefulWidget {
-  const NoteUpdateScreen({super.key});
+  final String title;
+  final String content;
+  final int id;
+  const NoteUpdateScreen(
+      {super.key,
+      required this.title,
+      required this.content,
+      required this.id});
 
   @override
   State<NoteUpdateScreen> createState() => _NoteUpdateScreenState();
 }
 
 class _NoteUpdateScreenState extends State<NoteUpdateScreen> {
-  TextEditingController noteContentcontroller =
-      TextEditingController(text: 'gafsdjhagsdhasgdjhasgd');
-  TextEditingController notetitlecontroller =
-      TextEditingController(text: 'gafsdjhagsdhasgdjhasgd');
+  late TextEditingController notetitlecontroller;
+  late TextEditingController? notecontentcontroller;
+  @override
+  void initState() {
+    notetitlecontroller = TextEditingController(text: widget.title);
+    notecontentcontroller = TextEditingController(text: widget.content);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: ColorConstants.textcolor,
+            )),
         centerTitle: true,
         title: Text(
           'Update Note',
@@ -62,7 +84,7 @@ class _NoteUpdateScreenState extends State<NoteUpdateScreen> {
             ),
             SizedBox(height: 20),
             TextFormField(
-              controller: noteContentcontroller,
+              controller: notecontentcontroller,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';
@@ -88,19 +110,28 @@ class _NoteUpdateScreenState extends State<NoteUpdateScreen> {
                   TextStyle(fontSize: 18, color: ColorConstants.primarycolor),
             ),
             SizedBox(height: 40),
-            Container(
-              decoration: BoxDecoration(
-                  color: ColorConstants.lightbluecolor,
-                  borderRadius: BorderRadius.circular(15)),
-              height: 60,
-              width: 160,
-              child: Center(
-                child: Text(
-                  'Update Note',
-                  style: TextStyle(
-                      color: ColorConstants.primarycolor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14),
+            InkWell(
+              onTap: () {
+                context.read<HomeScreenController>().updatenote(
+                    widget.id,
+                    notetitlecontroller?.text ?? 'no',
+                    notecontentcontroller?.text ?? 'no');
+                Navigator.pop(context);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: ColorConstants.lightbluecolor,
+                    borderRadius: BorderRadius.circular(15)),
+                height: 60,
+                width: 160,
+                child: Center(
+                  child: Text(
+                    'Update Note',
+                    style: TextStyle(
+                        color: ColorConstants.primarycolor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14),
+                  ),
                 ),
               ),
             )
