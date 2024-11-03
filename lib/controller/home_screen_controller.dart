@@ -41,7 +41,7 @@ class HomeScreenController with ChangeNotifier {
       await getnotes();
       notifyListeners();
     } catch (e) {
-      print(e);
+      debugPrint('Error adding note: $e');
     }
   }
 
@@ -52,7 +52,7 @@ class HomeScreenController with ChangeNotifier {
       notelist = await mydatabase1?.rawQuery('SELECT * FROM notes');
       notifyListeners();
     } catch (e) {
-      print('Error fetching notes: $e');
+      debugPrint('Error fetching notes: $e');
       notelist = [];
     }
     isLogined = false;
@@ -80,8 +80,7 @@ class HomeScreenController with ChangeNotifier {
         'INSERT INTO tasks(task, date, isCompleted) VALUES(?, ?, 0)',
         [task, date],
       );
-      await getPendingTasks();
-      notifyListeners();
+      await refreshTaskData();
     } catch (e) {
       debugPrint('Error adding task: $e');
     }
@@ -93,12 +92,17 @@ class HomeScreenController with ChangeNotifier {
         'UPDATE tasks SET isCompleted = 1 WHERE id = ?',
         [id],
       );
-      await getPendingTasks();
-      await getCompletedTasks();
-      notifyListeners();
+      await refreshTaskData();
     } catch (e) {
       debugPrint('Error completing task: $e');
     }
+  }
+
+  Future<void> refreshTaskData() async {
+    await getPendingTasks();
+    await getCompletedTasks();
+    calculatetaskpercent();
+    notifyListeners();
   }
 
   Future<void> getPendingTasks() async {
@@ -106,10 +110,12 @@ class HomeScreenController with ChangeNotifier {
       pendingTasks = await mydatabase1?.rawQuery(
         'SELECT * FROM tasks WHERE isCompleted = 0 ORDER BY id DESC',
       );
+      pendingTaskCount = pendingTasks?.length ?? 0;
       notifyListeners();
     } catch (e) {
       debugPrint('Error fetching pending tasks: $e');
       pendingTasks = [];
+      pendingTaskCount = 0;
     }
   }
 
@@ -118,17 +124,17 @@ class HomeScreenController with ChangeNotifier {
       completedTasks = await mydatabase1?.rawQuery(
         'SELECT * FROM tasks WHERE isCompleted = 1 ORDER BY id DESC',
       );
+      completedTaskCount = completedTasks?.length ?? 0;
       notifyListeners();
     } catch (e) {
       debugPrint('Error fetching completed tasks: $e');
       completedTasks = [];
+      completedTaskCount = 0;
     }
   }
 
   void calculatetaskpercent() {
     try {
-      completedTaskCount = completedTasks?.length ?? 0;
-      pendingTaskCount = pendingTasks?.length ?? 0;
       int totalTasks = completedTaskCount + pendingTaskCount;
 
       if (totalTasks == 0) {
@@ -143,12 +149,10 @@ class HomeScreenController with ChangeNotifier {
       debugPrint('Error calculating task percentage: $e');
       percent = 0;
       result = 0;
-      notifyListeners();
     }
   }
 
   HomeScreenController() {
-    // Initialize data when controller is created
     _initializeData();
   }
 
@@ -156,12 +160,9 @@ class HomeScreenController with ChangeNotifier {
     isLogined = true;
     notifyListeners();
 
-    await initdb(); // Ensure database is initialized
-    await getPendingTasks();
-    await getCompletedTasks();
+    await initdb();
+    await refreshTaskData();
     await getnotes();
-
-    calculatetaskpercent();
 
     isLogined = false;
     notifyListeners();
